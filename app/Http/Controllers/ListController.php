@@ -21,17 +21,9 @@
          */
         public function index()
         {
-            //
-        }
+            $lists = auth()->user()->list;
 
-        /**
-         * Show the form for creating a new resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function create()
-        {
-            //
+            return view('home', compact('lists'));
         }
 
         /**
@@ -67,7 +59,10 @@
         {
             $lists = auth()->user()->list();
 
-            return view('list', compact('list', 'lists'));
+            $completed = $list->items()->where('status', 1)->get();
+            $pending   = $list->items()->where('status', 0)->get();
+
+            return view('list', compact('list', 'lists', 'completed', 'pending'));
         }
 
         /**
@@ -77,33 +72,29 @@
          *
          * @return \Illuminate\Http\Response
          */
-        public function edit($id)
+        public function change(Request $request)
         {
-            //
-        }
+            $list        = Lists::find($request->get('pk'));
+            $list->title = $request->get('value');
+            $list->save();
 
-        /**
-         * Update the specified resource in storage.
-         *
-         * @param \Illuminate\Http\Request $request
-         * @param int                      $id
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function update(Request $request, $id)
-        {
-            //
+            return $list;
         }
 
         /**
          * Remove the specified resource from storage.
          *
-         * @param int $id
+         * @param \App\Lists $list
          *
          * @return \Illuminate\Http\Response
+         * @throws \Exception
          */
-        public function destroy($id)
+        public function destroy(Lists $list)
         {
-            //
+            if ($list->delete()) {
+                $list->items()->forceDelete();
+            }
+
+            return redirect()->route('home');
         }
     }

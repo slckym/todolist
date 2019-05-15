@@ -47,15 +47,62 @@
                             </div>
                         @endif
                         @if($list->items->count())
-                            <ul class="list-group">
-                                @foreach($lists->items as $item)
-                                    <li class="list-group-item">
-                                        <a href="{{ route("item.show", $item) }}">
-                                            {{ $item->description }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            @if($completed->count())
+                                <h3 class="header">Tamamlananlar</h3>
+                                <ul class="list-group">
+                                    @foreach($completed as $item)
+                                        <li class="item list-group-item {{ $item->isOver() ? 'list-group-item-danger' : null  }}">
+                                            <div class="row">
+                                                <div class="col">
+                                                <span class="detail" data-pk="{{ $item->id }}">
+                                                    {{ $item->detail }}
+                                                </span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="text-right">
+                                                        <form action="{{ route('item.destroy', $item) }}" method="post">
+                                                            <a href="{{ route('item.pending', $item) }}" class="btn btn-sm btn-primary">
+                                                                <i class="fas fa-times"></i> </a>
+                                                            @csrf @method("DELETE")
+                                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                            @if($pending->count())
+                                <h3 class="header">Bekleyenler</h3>
+                                <ul class="list-group">
+                                    @foreach($pending as $item)
+                                        <li class="item list-group-item {{ $item->isOver() ? 'list-group-item-danger' : null  }}">
+                                            <div class="row">
+                                                <div class="col">
+                                                <span class="detail" data-pk="{{ $item->id }}">
+                                                    {{ $item->detail }}
+                                                </span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="text-right">
+                                                        <form action="{{ route('item.destroy', $item) }}" method="post">
+                                                            <a href="{{ route('item.completed', $item) }}" class="btn btn-sm btn-success">
+                                                                <i class="fas fa-check"></i> </a>
+                                                            @csrf @method("DELETE")
+                                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         @else
                             <div class="alert alert-primary" role="alert">
                                 Listenizde yapılacak madde bulunmuyor.
@@ -99,4 +146,5 @@
             </form>
         </div>
     </div>
+
 @endsection

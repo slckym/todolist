@@ -34,27 +34,65 @@
         }
 
         /**
+         * Display the specified resource.
+         *
+         * @param $id
+         *
+         * @return void
+         */
+        public function completed($id)
+        {
+            $item         = Item::find($id);
+            $item->status = 1;
+            $item->save();
+
+            return redirect()->route('list.show', $item->list);
+        }
+
+        /**
+         * Display the specified resource.
+         *
+         * @param $id
+         *
+         * @return void
+         */
+        public function pending($id)
+        {
+            $item         = Item::find($id);
+            $item->status = 0;
+            $item->save();
+
+            return redirect()->route('list.show', $item->list);
+        }
+
+        /**
          * Update the specified resource in storage.
          *
          * @param \Illuminate\Http\Request $request
-         * @param int                      $id
          *
-         * @return \Illuminate\Http\Response
+         * @return bool
          */
-        public function update(Request $request, $id)
+        public function change(Request $request)
         {
-            //
+            $item         = Item::find($request->get('pk'));
+            $item->detail = $request->get('value');
+            $item->save();
+
+            return $item;
         }
 
         /**
          * Remove the specified resource from storage.
          *
-         * @param int $id
+         * @param \App\Item $item
          *
          * @return \Illuminate\Http\Response
+         * @throws \Exception
          */
-        public function destroy($id)
+        public function destroy(Item $item)
         {
-            //
+            $item->delete();
+
+            return redirect()->route('list.show', $item->list);
         }
     }

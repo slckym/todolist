@@ -35,4 +35,9 @@
         {
             return $this->belongsTo(Lists::class, 'list_id');
         }
+
+        public function isOver()
+        {
+            return $this->deadline < date('Y-m-d H:i:s');
+        }
     }

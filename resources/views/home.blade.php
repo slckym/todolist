@@ -27,10 +27,27 @@
                         @if($lists->count())
                             <ul class="list-group">
                                 @foreach($lists as $list)
-                                    <li class="list-group-item">
-                                        <a href="{{ route("list.show", $list) }}">
-                                            {{ $list->title }}
-                                        </a>
+                                    <li class="list-group-item list">
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="title" data-pk="{{ $list->id }}">
+                                                    {{ $list->title }}
+                                                </span>
+                                            </div>
+                                            <div class="col">
+                                                <div class="text-right">
+                                                    <form action="{{ route("list.destroy", $list) }}" method="post">
+                                                        <a href="{{ route("list.show", $list) }}" class="btn btn-sm btn-primary">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        @csrf @method("DELETE")
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </li>
                                 @endforeach
                             </ul>

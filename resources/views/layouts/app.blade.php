@@ -6,13 +6,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>To-DO List</title>
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-    <!-- Styles -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-editable.css') }}">
 </head>
 <body>
 <div id="app">
@@ -72,4 +72,39 @@
     </footer>
 </div>
 </body>
+<!-- Scripts -->
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="{{ asset('js/bootstrap-editable.min.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function(e)
+    {
+        $.ajaxSetup({
+            headers : {
+                'X-CSRF-Token' : $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $('.item .detail').editable({
+            mode : 'inline',
+            url : '{{ route('item.change') }}',
+            name : 'detail',
+            pk : $(this).data('pk'),
+            title : 'Maddeyi Düzenle',
+            ajaxOptions : {
+                method : 'post'
+            },
+        });
+
+        $('.list .title').editable({
+            mode : 'inline',
+            url : '{{ route('list.change') }}',
+            name : 'detail',
+            pk : $(this).data('pk'),
+            title : 'Maddeyi Düzenle',
+            ajaxOptions : {
+                method : 'post'
+            },
+        });
+    });
+</script>
 </html>

@@ -11,8 +11,17 @@
 	|
 	*/
 
+    Route::get('/', 'ListController@index')->name('home');
+    Route::resource('list', 'ListController')->except([
+        'edit', 'update', 'index', 'create'
+    ]);
+    Route::post('list/change', 'ListController@change')->name('list.change');
 
-    Route::get('/', 'HomeController@index')->name('home');
-    Route::resource('list', 'ListController');
-    Route::resource('item', 'ItemController');
+
+    Route::resource('item', 'ItemController')->except([
+        'edit', 'update', 'show', 'index', 'create'
+    ]);
+    Route::get('item/completed/{id}', 'ItemController@completed')->name('item.completed');
+    Route::get('item/pending/{id}', 'ItemController@pending')->name('item.pending');
+    Route::post('item/change', 'ItemController@change')->name('item.change');
     Auth::routes();
