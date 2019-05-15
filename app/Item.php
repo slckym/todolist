@@ -33,6 +33,6 @@
          */
         public function list(): BelongsTo
         {
-            return $this->belongsTo(Lists::class);
+            return $this->belongsTo(Lists::class, 'list_id');
         }
     }

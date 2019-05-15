@@ -14,11 +14,12 @@
          */
         public function up()
         {
-            Schema::create('item', function (Blueprint $table) {
+            Schema::create('items', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('list_id');
                 $table->text('detail');
-                $table->timestamp('deadline');
+                $table->timestamp('deadline')->nullable();
+                $table->tinyInteger('status')->default(0);
                 $table->timestamps();
             });
         }

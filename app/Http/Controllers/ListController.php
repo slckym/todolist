@@ -2,7 +2,9 @@
 
     namespace App\Http\Controllers;
 
+    use App\Lists;
     use Illuminate\Http\Request;
+    use Illuminate\Support\Str;
 
     class ListController extends Controller
     {
@@ -41,19 +43,31 @@
          */
         public function store(Request $request)
         {
-            //
+            $data = [
+                'slug'  => Str::slug($request->get('title')),
+                'title' => $request->get('title')
+            ];
+
+            $list = auth()->user()->list()->create($data);
+            if ($list) {
+                return redirect()->back()->with('message', 'Liste eklendi');
+            }
+
+            return redirect()->route('home')->withErrors("Liste eklerken sorun oluştu.");
         }
 
         /**
          * Display the specified resource.
          *
-         * @param int $id
+         * @param \App\Lists $list
          *
-         * @return \Illuminate\Http\Response
+         * @return void
          */
-        public function show($id)
+        public function show(Lists $list)
         {
-            //
+            $lists = auth()->user()->list();
+
+            return view('list', compact('list', 'lists'));
         }
 
         /**

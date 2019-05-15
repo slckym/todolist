@@ -13,7 +13,7 @@ class CreateListTable extends Migration
      */
     public function up()
     {
-        Schema::create('list', function (Blueprint $table) {
+        Schema::create('lists', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->string('slug');

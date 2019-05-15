@@ -16,7 +16,7 @@
         /**
          * @var string
          */
-        protected $table = "list";
+        protected $table = "lists";
 
         /**
          * @var array
@@ -30,7 +30,7 @@
          */
         public function items(): HasMany
         {
-            return $this->hasMany(Item::class);
+            return $this->hasMany(Item::class, 'list_id');
         }
 
         /**
