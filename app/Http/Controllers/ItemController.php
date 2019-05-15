@@ -2,6 +2,9 @@
 
     namespace App\Http\Controllers;
 
+    use App\Events\ChangeListItem;
+    use App\Events\CreateListItem;
+    use App\Events\DeleteListItem;
     use App\Http\Requests\CreateItemRequest;
     use App\Item;
     use Carbon\Carbon;
@@ -30,6 +33,10 @@
 
             $item = Item::create($data);
 
+            if ($item) {
+                event(new CreateListItem($item));
+            }
+
             return redirect()->route('list.show', $item->list->id);
         }
 
@@ -44,7 +51,9 @@
         {
             $item         = Item::find($id);
             $item->status = 1;
-            $item->save();
+            if ($item->save()) {
+                event(new ChangeListItem($item));
+            }
 
             return redirect()->route('list.show', $item->list);
         }
@@ -60,7 +69,9 @@
         {
             $item         = Item::find($id);
             $item->status = 0;
-            $item->save();
+            if ($item->save()) {
+                event(new ChangeListItem($item));
+            }
 
             return redirect()->route('list.show', $item->list);
         }
@@ -76,7 +87,9 @@
         {
             $item         = Item::find($request->get('pk'));
             $item->detail = $request->get('value');
-            $item->save();
+            if ($item->save()) {
+                event(new ChangeListItem($item));
+            }
 
             return $item;
         }
@@ -91,7 +104,9 @@
          */
         public function destroy(Item $item)
         {
-            $item->delete();
+            if ($item->delete()) {
+                event(new DeleteListItem($item));
+            }
 
             return redirect()->route('list.show', $item->list);
         }

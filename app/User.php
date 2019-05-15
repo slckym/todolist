@@ -49,4 +49,12 @@
         {
             return $this->hasMany(Lists::class);
         }
+
+        /**
+         * @return \Illuminate\Database\Eloquent\Relations\HasMany
+         */
+        public function actions(): HasMany
+        {
+            return $this->hasMany(Action::class);
+        }
     }
